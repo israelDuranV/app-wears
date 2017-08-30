@@ -1,0 +1,113 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<dom-module id="app-add">
+  <template>
+    <style>
+
+    input,select{
+      width:100%;
+      font-size: 16px;
+    }
+    label{
+      padding-bottom:20px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    button{
+      left: 50%;
+      top:20px;
+      margin-left: -200px;
+      padding:10px;
+      width:400px;
+      color: white;
+      position: relative;
+      font-weight: bold;
+      text-align: center;
+      display: block;
+      background-color: green;
+    }
+    </style>
+    <!--
+    <button on-click="showproduct">Agregar producto</button>
+  -->
+  <div id="agregar">
+        <h2>Agrega un producto al catalogo</h2>
+        <form>
+          <label>Nombre de producto: </label>
+          <br>
+          <input type="text" title="Nombre" id="nombre" value="Nombre de producto">
+          <br>
+          <label>Precio:</label>
+          <br>
+          <input type="number" id="precio" value="0"/>
+          <br>
+          <label>Tallas:</label>
+          <br>
+          <select nombre="tallas" title="Tallas" id="tallas">
+            <option value="XS">X</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+          </select>
+          <br>
+          <label>Stock ó Venta</label>
+          <select id="stockorsales">
+          <option>Stock</option>
+          <option>Venta</option>
+          </select>
+          <br>
+          <label>Unidades:</label>
+          <br>
+          <input type="number" title="unidades" id="unidades" value="0">
+          <br>
+          <button id="enviar" on-click="newClothes">Aceptar</button>
+        </form>
+  </div>
+  <br>
+  <br>
+  <br>
+  </template>
+  <script>
+  (function myApp(){
+    class AppAdd extends Polymer.Element {
+      static get is() { return 'app-add'; }
+      static get properties() {
+        return {
+          titulo: {
+            type: String,
+            value: 'bancomer wears'
+          },
+          precio: {
+            type: Number,
+            value:0,
+          }
+
+      }
+    }
+
+    newClothes(event){
+          event.preventDefault();
+          let inputName = this.shadowRoot.querySelector('#nombre');
+          let inputTallas = this.shadowRoot.querySelector('#tallas');
+          let estado = this.shadowRoot.querySelector('#stockorsales');
+          let unidades = this.shadowRoot.querySelector('#unidades');
+          let precio = this.shadowRoot.querySelector('#precio');
+          let clothesLength =  this.clothes.length;
+          this.dispatchEvent(new CustomEvent('clothe-created', {
+            bubbles: true,
+            composed: true,
+            detail: {
+              id: clothesLength,
+              nombre: inputName.value,
+              tallas: inputTallas.value,
+              estado: estado.value,
+              unidades: unidades.value,
+              precio: precio.value
+            }
+          }));
+        }
+  }
+    window.customElements.define(AppAdd.is, AppAdd);
+  })();
+  </script>
+</dom-module>

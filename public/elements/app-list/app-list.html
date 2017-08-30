@@ -1,0 +1,95 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="/public/elements/app-elimina/app-elimina.html">
+<link rel="import" href="/public/elements/app-btnedt/app-btnedt.html">
+<dom-module id="app-list">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      table{
+        width:100%;
+      }
+      label{
+        padding-bottom:20px;
+        font-size: 16px;
+        font-weight: bold;
+      }
+      td,th{
+        border: solid 1px;
+        width:15px;
+      }
+    </style>
+    <h2>Movimientos Realizados</h2>
+    <table>
+      <thead>
+        <tr>
+          <td>Eliminar Producto</td>
+          <td>Editar Producto</td>
+          <td>id</td>
+          <td>Nombre</td>
+          <td>Talla</td>
+          <td>Estado</td>
+          <td>precio</td>
+          <td>Unidades</td>
+        </tr>
+      </thead>
+      <tbody>
+        <template is="dom-repeat" items="[[clothes]]" as = "ropa">
+          <tr>
+            <td>
+              <app-elimina iden="[[ropa.id]]" on-click="eliminarProducto" estado="{{estadod}}"></app-elimina>
+            </td>
+            <td>
+              <app-btnedt iden="[[ropa.id]]" class="edit"></app-btnedt>
+            </td>
+            <td>[[ropa.id]]</td>
+            <td>[[ropa.nombre]]</td>
+            <td>[[ropa.tallas]]</td>
+            <td>[[ropa.estado]]</td>
+              <td>[[ropa.precio]]</td>
+            <td>[[ropa.unidades]]</td>
+          </tr>
+        </template>
+      </tboby>
+    </table>
+  </template>
+  <script>
+  (function appListPolymer(){
+    class AppList extends Polymer.Element {
+      static get is() { return 'app-list'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'app'
+          },
+          clothes: {
+            type: Array,
+          },
+          estadod: {
+            type: Boolean,
+            value: false,
+          }
+        };
+      }
+    eliminarProducto(){
+      this.estadod = true;
+    }
+    editarProducto(){
+        this.dispatchEvent(new CustomEvent('clothe-edite', {
+                  bubbles: true,
+                  composed: true,
+                  detail: {
+                    id: this.estado = true,
+                  }
+
+                }));
+            }
+    }
+
+    window.customElements.define(AppList.is, AppList);
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,47 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-repeat.html">
+<dom-module id="app-elimina">
+  <template>
+    <style>
+    button{
+      background-color: green;
+    }
+    </style>
+    <button iden="[[iden]]" stado="[[stado]]" class="delete" on-click="eliminarProducto">Eliminar Producto</button>
+  </template>
+  <script>
+  (function appEliminaPolymer(){
+    class AppElimina extends Polymer.Element {
+      static get is() {
+        return 'app-elimina';
+      }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'app'
+          },
+          iden: {
+            type: Number,
+          },
+          stado:{
+            type: Boolean,
+          }
+    }
+    }
+    eliminarProducto(){
+      if(this.estado == true){
+          this.dispatchEvent(new CustomEvent('clothe-deleted', {
+            bubbles: true,
+            composed: true,
+            detail: {
+              id: this.iden,
+            }
+          }));
+      }
+    }
+}
+    window.customElements.define(AppElimina.is, AppElimina);
+  })();
+  </script>
+</dom-module>

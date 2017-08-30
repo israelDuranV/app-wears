@@ -1,0 +1,156 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/public/elements/app-report/app-report.html">
+<link rel="import" href="/public/elements/app-list/app-list.html">
+<link rel="import" href="/public/elements/app-add/app-add.html">
+<link rel="import" href="/public/elements/app-editor/app-editor.html">
+<dom-module id="my-app">
+  <template>
+    <style>
+    h2{
+      background-color: blue;
+      color: yellow;
+      padding: 10px;
+      text-align: center;
+    }
+    #addprod,#edtprod{
+      width:100%;
+      height: auto;
+      display:none;
+      padding: 20px;
+    }
+    </style>
+    <h2>[[titulo]]</h2>
+<button on-click="viewAddProd">Agregar productos</button>
+<section id="addprod">
+<app-add clothes="{{clothes}}" on-clothe-created="clotheCreated"></app-add>
+</section>
+<section id="edtprod">
+<app-editor id-selected="{{idActive}}" on-clothe-editado="clotheEditado" clothes="{{clothes}}"></app-editor>
+</section>
+<app-report clothesales="{{clothesSales}}" clothestock="{{clotheStock}}"></app-report>
+<hr>
+<app-list clothes="{{clothes}}" on-clothe-deleted="clotheDeleted" on-clothe-edite="clotheEdited" conteo="conteo"><app-list>
+<hr>
+  </template>
+  <script>
+  (function myApp(){
+    class MyApp extends Polymer.Element {
+      static get is() { return 'my-app'; }
+      static get properties() {
+        return {
+          titulo: {
+            type: String,
+            value: 'bancomer wears'
+          },
+          clothes: {
+            type: Array,
+            value: [
+            {
+              id:0,
+              nombre:"Sombrero HT",
+              precio: "500",
+              tallas: 'X',
+              estado:'Stock',
+              unidades: "60",
+              observers: '_reportCreated'
+            }
+          ]
+        },
+        clothesSales: {
+          type: Array,
+          value: []
+      },
+      clotheStock: {
+        type: Array,
+        value: []
+    },
+        newClothes: {
+        type: Array,
+        value: {
+            id:0,
+            nombre:"eeee",
+            tallas: 0,
+            precio:0,
+            estado: 'stock',
+            unidades:0
+          }
+        },
+        id: {
+          type: Number,
+        },
+        idActive: {
+          type: Number
+        },
+        nombre: {
+          type: String,
+        },
+        tallas: {
+          type: String,
+        },
+        unidades: {
+          type: Number,
+        },
+        precio: {
+          type: Number,
+        },
+        estado: {
+          type:String,
+        }
+        }
+      }
+    viewAddProd(){
+      this.shadowRoot.querySelector("#addprod").style.display='inline';
+      this.shadowRoot.querySelector("#edtprod").style.display='none';
+    }
+    clotheCreated(event){
+      this.push('clothes', {
+        id: event.detail.id,
+        nombre : event.detail.nombre,
+        precio : event.detail.precio,
+        tallas: event.detail.tallas,
+        estado: event.detail.estado,
+        unidades: event.detail.unidades
+      }
+    );
+    }
+    clotheEditado(event){
+      this.splice('clothes',event.detail.id,1);
+      this.push('clothes', {
+        id: event.detail.id,
+        nombre : event.detail.nombre,
+        precio : event.detail.precio,
+        tallas: event.detail.tallas,
+        estado: event.detail.estado,
+        unidades: event.detail.unidades
+      });
+    }
+    clotheDeleted(event){
+      let id = event.detail.id;
+      console.log(id);
+      this.splice('clothes',id,1);
+    }
+    clotheEdited(event){
+      this.idActive =  event.detail.id;
+      this.shadowRoot.querySelector("#addprod").style.display='none';
+      this.shadowRoot.querySelector("#edtprod").style.display='inline';
+    }
+    _reportCreated(){
+      for(let clot of this.clothes){
+        if(clot.estado =="Stock"){
+          this.push('clothesSales', {
+            nombre : clot.nombre,
+            unidades: clot.unidades
+        });
+      }else{
+          this.push('clothesStock', {
+            nombre : clot.nombre,
+            unidades: clot.unidades
+        });
+      }
+    }
+  }
+}
+    window.customElements.define(MyApp.is, MyApp);
+  })();
+  </script>
+</dom-module>

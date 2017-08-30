@@ -1,0 +1,110 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<dom-module id="app-editor">
+  <template>
+    <style>
+    input,select{
+      width:100%;
+      font-size: 16px;
+    }
+    label{
+      padding-bottom:20px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    button{
+      left: 50%;
+      top:20px;
+      margin-left: -200px;
+      padding:10px;
+      width:400px;
+      color: white;
+      position: relative;
+      font-weight: bold;
+      text-align: center;
+      display: block;
+      background-color: green;
+    }
+    </style>
+  <template is="dom-repeat" items="{{clothes}}" as = "ropa">
+      <template is="dom-if" if="[[_isEqualTo(idSelected, ropa.id)]]">
+    <h2>Edita un producto del catalogo</h2>
+    <form>
+      <label>Nombre de producto: </label>
+      <br>
+      <input type="hidden" title="id" id="iden" value="[[ropa.id]]">
+      <input type="text" title="Nombre" id="nombre" value="[[ropa.nombre]]">
+      <br>
+      <label>Precio:</label>
+      <br>
+      <input type="number" id="precio" value="[[ropa.precio]]"/>
+      <br>
+      <label>Tallas:</label>
+      <br>
+      <select nombre="tallas" title="Tallas" id="tallas">
+        <option value="XS">X</option>
+        <option value="S">S</option>
+        <option value="M">M</option>
+        <option value="L">L</option>
+        <option value="XL">XL</option>
+      </select>
+      <br>
+      <select id="stockorsales">
+      <option>Stock</option>
+      <option>Venta</option>
+      </select>
+      <br>
+      <label>Unidades:</label>
+      <br>
+      <input type="number" title="unidades" id="unidades" value="[[ropa.unidades]]">
+      <br>
+      <button id="enviar" on-click="editaClothes">Aceptar</button>
+    </form>
+    <br>
+    <br>
+    <br>
+  </template>
+</template>
+</template>
+  <script>
+  (function appEditorPolymer(){
+    class AppEditor extends Polymer.Element {
+      static get is() {
+        return 'app-editor';
+      }
+      static get properties(){
+        return {
+        idSelected: {
+          type: Number,
+        }
+      }
+      }
+      editaClothes(event){
+            event.preventDefault();
+            let inputName = this.shadowRoot.querySelector('#nombre');
+            let inputTallas = this.shadowRoot.querySelector('#tallas');
+            let estado = this.shadowRoot.querySelector('#stockorsales');
+            let unidades = this.shadowRoot.querySelector('#unidades');
+            let precio = this.shadowRoot.querySelector('#precio');
+            let id = this.shadowRoot.querySelector('#iden');
+            this.dispatchEvent(new CustomEvent('clothe-editado', {
+              bubbles: true,
+              composed: true,
+              detail: {
+                id: id.value,
+                nombre: inputName.value,
+                precio: precio.value,
+                tallas: inputTallas.value,
+                estado: estado.value,
+                unidades: unidades.value
+              }
+            }));
+          }
+      _isEqualTo(active, index) {
+        return active == index
+    }
+
+      }
+    window.customElements.define(AppEditor.is, AppEditor);
+  })();
+  </script>
+</dom-module>

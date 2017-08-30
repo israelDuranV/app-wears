@@ -1,0 +1,30 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<dom-module id="app-report">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <label>Listado de productos</label>
+      <template is="dom-repeat" items="[[clothesSales"]] as = "ropa">
+        <h2>Estoy en un repeat</h2>
+      <template>
+  </template>
+  <script>
+  (function appReportPolymer(){
+class AppReport extends Polymer.Element {
+      static get is() { return 'app-report'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: ''
+          }
+        };
+      }
+    }
+    window.customElements.define(AppReport.is, AppReport);
+})();
+  </script>
+</dom-module>
